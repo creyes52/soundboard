@@ -24,9 +24,14 @@ namespace SoundBoardLive {
 		AudioFileReader audioFileReader = null;
 		Status status;
 		String id;
+		public string FileName { get; private set; }
 
-
-		public SoundCue(String id) {
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="FileName"></param>
+		public SoundCue(String id, String FileName = null) {
 			InitializeComponent();
 
 			lblId.Text = id;
@@ -34,23 +39,32 @@ namespace SoundBoardLive {
 			this.id = id;
 			waveOutDevice = new WaveOut();
 			status = Status.Empty;
-		}
+			FileName = null;
 
-		private async void btBrowse_Click(object sender, EventArgs e) {
-			var f = new OpenFileDialog();
-			DialogResult res = f.ShowDialog();
-
-			if (res == DialogResult.OK) {
-				
-				await LoadSound(f.FileName);
-
-				lblFile.Text = Path.GetFileName(f.FileName);
-				btPlay.Enabled = true;
-				status = Status.Stopped;
+			if ( FileName != null ) {
+				#pragma warning disable CS4014 // Do not await
+				LoadSound(FileName);
+				#pragma warning restore CS4014 // Do not await
 			}
 		}
 
-		private async Task LoadSound(String FileName) {
+		private async void btBrowse_Click(object sender, EventArgs e) {
+			var dlg = new OpenFileDialog();
+			dlg.Filter = "Music files (*.mp3;*.wav)|*.mp3;*.wav";
+
+			DialogResult res = dlg.ShowDialog();
+
+			if (res == DialogResult.OK) {
+				
+				await LoadSound(dlg.FileName);
+			}
+		}
+
+		public async Task LoadSound(String FileName) {
+			lblFile.Text = Path.GetFileName(FileName);
+			btPlay.Enabled = true;
+			status = Status.Stopped;
+			this.FileName = FileName;
 			await Task.Run(() => {
 				audioFileReader = new AudioFileReader(FileName);
 				waveOutDevice.Init(audioFileReader);
