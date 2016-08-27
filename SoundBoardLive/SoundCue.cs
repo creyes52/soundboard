@@ -126,9 +126,9 @@ namespace SoundBoardLive {
 				audioFileReader.Position = 0;
 				progressCue.Value = 0;
 
-				waveOutDevice.Dispose();
-				waveOutDevice = new WaveOut();
-				waveOutDevice.Init(audioFileReader);
+				//waveOutDevice.Dispose();
+				//waveOutDevice = new WaveOut();
+				//waveOutDevice.Init(audioFileReader);
 			}
 		}
 		
