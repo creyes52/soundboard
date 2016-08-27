@@ -13,12 +13,15 @@ using System.IO;
 namespace SoundBoardLive {
 
 	enum Status {
+		Empty,
 		Playing,
 		Paused,
-		Empty,
 		Stopped
 	}
 
+	/// <summary>
+	/// Sound cue playback control
+	/// </summary>
 	public partial class SoundCue : UserControl {
 		IWavePlayer waveOutDevice;
 		AudioFileReader audioFileReader = null;
@@ -57,8 +60,7 @@ namespace SoundBoardLive {
 				Modified(this, null);
 			}
 		}
-
-
+		
 		private void btPlay_Click(object sender, EventArgs e) {
 			this.Play();
 		}
@@ -68,33 +70,48 @@ namespace SoundBoardLive {
 		}
 
 
+		/// <summary>
+		/// Resets the cue
+		/// </summary>
 		public void Clear() {
+			Stop();
+
 			if ( waveOutDevice != null ) {
+				waveOutDevice.Stop();
 				waveOutDevice.Dispose();
 			}
 			waveOutDevice = new WaveOut();
 			if ( audioFileReader != null ) {
 				audioFileReader.Close();
 			}
+
 			lblFile.Text = "";
 			FileName = null;
+			progressCue.Value = 0;
+			progressCue.Visible = false;
+
+			status = Status.Empty;
+			timer1.Enabled = false;
 		}
 
 		public async Task LoadSound(String FileName) {
+			Clear();
+
 			lblFile.Text = Path.GetFileName(FileName);
 			btPlay.Enabled = true;
 			status = Status.Stopped;
 			this.FileName = FileName;
+			
 			await Task.Run(() => {
 				audioFileReader = new AudioFileReader(FileName);
 				waveOutDevice.Init(audioFileReader);
 			});
 		}
-
-
+		
 		public void Restart() {
 			if (audioFileReader != null) {
 				audioFileReader.Position = 0;
+				progressCue.Value = 0;
 			}
 		}
 		
@@ -103,16 +120,23 @@ namespace SoundBoardLive {
 				waveOutDevice.Play();
 
 				btPlay.Text = "Pause";
-				status = Status.Playing;
 				timer1.Enabled = true;
 				progressCue.Visible = true;
 
+				status = Status.Playing;
 			} else if (status == Status.Playing) {
+				Stop();
+			}
+		}
+
+		public void Stop() {
+			if ( status == Status.Playing) {
 				waveOutDevice.Pause();
 
 				btPlay.Text = "Play";
-				status = Status.Stopped;
+
 				timer1.Enabled = false;
+				status = Status.Stopped;
 			}
 		}
 	}

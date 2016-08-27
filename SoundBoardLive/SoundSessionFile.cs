@@ -6,9 +6,6 @@ using System.IO;
 namespace SoundBoardLive {
 	class SoundSessionFile {
 
-		public SoundSessionFile() {
-			this.FileList = new Dictionary<char, string>();
-		}
 
 		/// <summary>
 		/// The location of this file
@@ -19,6 +16,21 @@ namespace SoundBoardLive {
 		/// The dictionary of keys and filenames in this session
 		/// </summary>
 		public Dictionary<char, String>  FileList { get; set; }
+
+		/// <summary>
+		/// Indicates if this session has been modified since it was loaded (or last saved)
+		/// </summary>
+		public bool Modified { get; private set; }
+
+
+		
+		
+		/// <summary>
+		/// Initializes an empty session object
+		/// </summary>
+		public SoundSessionFile() {
+			this.FileList = new Dictionary<char, string>();
+		}
 
 		/// <summary>
 		/// Loads and returns a session file

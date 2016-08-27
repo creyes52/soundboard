@@ -29,6 +29,7 @@
 			this.cargarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.guardarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.panel1 = new System.Windows.Forms.Panel();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -37,10 +38,11 @@
 			this.lstCues.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.lstCues.BackColor = System.Drawing.Color.LightSteelBlue;
 			this.lstCues.Location = new System.Drawing.Point(0, 29);
 			this.lstCues.Margin = new System.Windows.Forms.Padding(3, 20, 3, 3);
 			this.lstCues.Name = "lstCues";
-			this.lstCues.Size = new System.Drawing.Size(840, 324);
+			this.lstCues.Size = new System.Drawing.Size(841, 271);
 			this.lstCues.TabIndex = 0;
 			// 
 			// menuStrip1
@@ -49,7 +51,7 @@
             this.archivoToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(840, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(841, 24);
 			this.menuStrip1.TabIndex = 1;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -87,11 +89,22 @@
 			this.salirToolStripMenuItem.Text = "&Salir";
 			this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
 			// 
+			// panel1
+			// 
+			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.panel1.BackColor = System.Drawing.Color.Gray;
+			this.panel1.Location = new System.Drawing.Point(0, 306);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(841, 79);
+			this.panel1.TabIndex = 2;
+			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(840, 353);
+			this.ClientSize = new System.Drawing.Size(841, 385);
+			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.menuStrip1);
 			this.Controls.Add(this.lstCues);
 			this.KeyPreview = true;
@@ -113,6 +126,7 @@
 		private System.Windows.Forms.ToolStripMenuItem cargarToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem guardarToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
+		private System.Windows.Forms.Panel panel1;
 	}
 }
 

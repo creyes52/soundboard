@@ -21,7 +21,7 @@ namespace SoundBoardLive {
 			InitializeComponent();
 
 			this.cues = new Dictionary<char, SoundCue>();
-			for (char n = 'A'; n < 'P'; n++) {
+			for (char n = 'A'; n <= 'L'; n++) {
 				cues.Add(n, new SoundCue(n.ToString()));
 			}
 			
@@ -115,11 +115,17 @@ namespace SoundBoardLive {
 					return;
 				}
 			}
-
+			
 			var dlg = new OpenFileDialog();
 			dlg.Filter = "soundboard (*.sbd)|*.sbd";
 			DialogResult res = dlg.ShowDialog();
 			if (res == DialogResult.OK) {
+				
+				// stop everything
+				foreach(var cue in cues) {
+					cue.Value.Stop();
+				}
+
 				try {
 					LoadSession(dlg.FileName);
 				} catch (Exception ex) {
