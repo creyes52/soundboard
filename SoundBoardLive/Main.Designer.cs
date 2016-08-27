@@ -66,21 +66,24 @@
 			// cargarToolStripMenuItem
 			// 
 			this.cargarToolStripMenuItem.Name = "cargarToolStripMenuItem";
-			this.cargarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.cargarToolStripMenuItem.Text = "&Cargar";
+			this.cargarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+			this.cargarToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+			this.cargarToolStripMenuItem.Text = "&Abrir";
 			this.cargarToolStripMenuItem.Click += new System.EventHandler(this.cargarToolStripMenuItem_Click_1);
 			// 
 			// guardarToolStripMenuItem
 			// 
 			this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
-			this.guardarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.guardarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+			this.guardarToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
 			this.guardarToolStripMenuItem.Text = "&Guardar";
 			this.guardarToolStripMenuItem.Click += new System.EventHandler(this.guardarToolStripMenuItem_Click);
 			// 
 			// salirToolStripMenuItem
 			// 
 			this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-			this.salirToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.salirToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+			this.salirToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
 			this.salirToolStripMenuItem.Text = "&Salir";
 			this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
 			// 
@@ -93,7 +96,7 @@
 			this.Controls.Add(this.lstCues);
 			this.KeyPreview = true;
 			this.Name = "Main";
-			this.Text = "Tablero de sonidos";
+			this.Text = "Session sin titulo";
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Main_KeyUp);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();

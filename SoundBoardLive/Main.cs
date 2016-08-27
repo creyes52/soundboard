@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using NAudio;
 using NAudio.Wave;
+using System.IO;
 
 namespace SoundBoardLive {
 	public partial class Main : Form {
 		Dictionary<char, SoundCue> cues;
 		SoundSessionFile Session;
+		bool sessionModified;
 
 		public Main() {
 			InitializeComponent();
@@ -25,11 +27,24 @@ namespace SoundBoardLive {
 			
 			foreach(var cue in cues) {
 				lstCues.Controls.Add(cue.Value);
+				cue.Value.Modified += Cue_Modified;
 			}
+
+			this.sessionModified = false;
 		}
-		
+
+		private void Cue_Modified(object sender, EventArgs e) {
+			if ( sessionModified == false) {
+				this.Text = this.Text + " *";
+			}
+			sessionModified = true;
+		}
+
 		private async void LoadSession(String FileName) {
 			this.Session = SoundSessionFile.Load(FileName);
+
+			this.Text = Path.GetFileName(FileName);
+			this.sessionModified = false;
 
 			// update the UI
 			foreach (var pair in this.Session.FileList) {
@@ -37,6 +52,8 @@ namespace SoundBoardLive {
 				if (cues.TryGetValue(pair.Key, out soundCue)) {
 					if ( pair.Value != null ) {
 						await soundCue.LoadSound(pair.Value);
+					} else {
+						soundCue.Clear();
 					}
 				}
 			}
@@ -57,6 +74,8 @@ namespace SoundBoardLive {
 				} else {
 					return;
 				}
+			} else {
+				FileDest = this.Session.FileName;
 			}
 
 			// update session
@@ -66,6 +85,9 @@ namespace SoundBoardLive {
 
 			if ( this.Session != null ) {
 				this.Session.Save(FileDest);
+
+				this.Text = Path.GetFileName(FileDest);
+				this.sessionModified = false;
 			}
 		}
 
@@ -75,7 +97,7 @@ namespace SoundBoardLive {
 			SoundCue soundCue;
 			if (cues.TryGetValue((char)e.KeyValue, out soundCue)) {
 				if (e.Shift) {
-					soundCue.Reset();
+					soundCue.Restart();
 				} else {
 					soundCue.Play();
 				}
@@ -87,9 +109,15 @@ namespace SoundBoardLive {
 		}
 
 		private void cargarToolStripMenuItem_Click_1(object sender, EventArgs e) {
+			if ( this.sessionModified ) {
+				DialogResult outDlg = MessageBox.Show("¿Descartar los cambios actuales?", "Session modificada", MessageBoxButtons.YesNo);
+				if ( outDlg == DialogResult.No) {
+					return;
+				}
+			}
+
 			var dlg = new OpenFileDialog();
 			dlg.Filter = "soundboard (*.sbd)|*.sbd";
-
 			DialogResult res = dlg.ShowDialog();
 			if (res == DialogResult.OK) {
 				try {

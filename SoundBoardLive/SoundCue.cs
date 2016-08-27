@@ -25,6 +25,7 @@ namespace SoundBoardLive {
 		Status status;
 		String id;
 		public string FileName { get; private set; }
+		public event EventHandler Modified = (a, b) => { };
 
 		/// <summary>
 		/// 
@@ -33,13 +34,10 @@ namespace SoundBoardLive {
 		/// <param name="FileName"></param>
 		public SoundCue(String id, String FileName = null) {
 			InitializeComponent();
-
 			lblId.Text = id;
-
 			this.id = id;
-			waveOutDevice = new WaveOut();
-			status = Status.Empty;
-			FileName = null;
+
+			Clear();
 
 			if ( FileName != null ) {
 				#pragma warning disable CS4014 // Do not await
@@ -55,9 +53,31 @@ namespace SoundBoardLive {
 			DialogResult res = dlg.ShowDialog();
 
 			if (res == DialogResult.OK) {
-				
 				await LoadSound(dlg.FileName);
+				Modified(this, null);
 			}
+		}
+
+
+		private void btPlay_Click(object sender, EventArgs e) {
+			this.Play();
+		}
+		
+		private void timer1_Tick(object sender, EventArgs e) {
+			progressCue.Value = (int) (100 * audioFileReader.Position / audioFileReader.Length);
+		}
+
+
+		public void Clear() {
+			if ( waveOutDevice != null ) {
+				waveOutDevice.Dispose();
+			}
+			waveOutDevice = new WaveOut();
+			if ( audioFileReader != null ) {
+				audioFileReader.Close();
+			}
+			lblFile.Text = "";
+			FileName = null;
 		}
 
 		public async Task LoadSound(String FileName) {
@@ -68,15 +88,18 @@ namespace SoundBoardLive {
 			await Task.Run(() => {
 				audioFileReader = new AudioFileReader(FileName);
 				waveOutDevice.Init(audioFileReader);
-			}); 
+			});
 		}
 
-		private void btPlay_Click(object sender, EventArgs e) {
-			this.Play();
-		}
 
+		public void Restart() {
+			if (audioFileReader != null) {
+				audioFileReader.Position = 0;
+			}
+		}
+		
 		public void Play() {
-			if ( status == Status.Stopped || status == Status.Paused) {
+			if (status == Status.Stopped || status == Status.Paused) {
 				waveOutDevice.Play();
 
 				btPlay.Text = "Pause";
@@ -84,23 +107,13 @@ namespace SoundBoardLive {
 				timer1.Enabled = true;
 				progressCue.Visible = true;
 
-			} else if ( status == Status.Playing ) {
+			} else if (status == Status.Playing) {
 				waveOutDevice.Pause();
 
 				btPlay.Text = "Play";
 				status = Status.Stopped;
 				timer1.Enabled = false;
 			}
-		}
-
-		public void Reset() {
-			if ( audioFileReader != null ) {
-				audioFileReader.Position = 0;
-			}
-		}
-
-		private void timer1_Tick(object sender, EventArgs e) {
-			progressCue.Value = (int) (100 * audioFileReader.Position / audioFileReader.Length);
 		}
 	}
 }
