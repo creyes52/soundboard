@@ -16,21 +16,25 @@ namespace SoundBoardLive {
 		Dictionary<char, SoundCue> cues;
 		SoundSessionFile Session;
 		bool sessionModified;
+		private Graphics graph;
 
 		public Main() {
 			InitializeComponent();
-
+			this.sessionModified = false;
+			
+			// initialize cues
 			this.cues = new Dictionary<char, SoundCue>();
 			for (char n = 'A'; n <= 'L'; n++) {
-				cues.Add(n, new SoundCue(n.ToString()));
-			}
-			
-			foreach(var cue in cues) {
-				lstCues.Controls.Add(cue.Value);
-				cue.Value.Modified += Cue_Modified;
+				var cueControl = new SoundCue(n.ToString());
+				cueControl.Modified += Cue_Modified;
+
+				cues.Add(n, cueControl);// add to data model
+				lstCues.Controls.Add(cueControl);// add to UI
 			}
 
-			this.sessionModified = false;
+			// initialize sound chart
+			graph = panelTransport.CreateGraphics();
+			graph.Clear(Color.Black);
 		}
 
 		private void Cue_Modified(object sender, EventArgs e) {
@@ -136,6 +140,17 @@ namespace SoundBoardLive {
 
 		private void salirToolStripMenuItem_Click(object sender, EventArgs e) {
 			this.Close();
+		}
+
+		private void cargarMusicaToolStripMenuItem_Click(object sender, EventArgs e) {
+			var dlg = new OpenFileDialog();
+			dlg.Filter = "Music files (*.mp3;*.wav)|*.mp3;*.wav";
+
+			DialogResult res = dlg.ShowDialog();
+
+			if (res == DialogResult.OK) {
+				var audioFileReader = new AudioFileReader(dlg.FileName);
+			}
 		}
 	}
 }

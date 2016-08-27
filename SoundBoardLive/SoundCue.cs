@@ -51,7 +51,7 @@ namespace SoundBoardLive {
 
 		private async void btBrowse_Click(object sender, EventArgs e) {
 			var dlg = new OpenFileDialog();
-			dlg.Filter = "Music files (*.mp3;*.wav)|*.mp3;*.wav";
+			dlg.Filter = "Music files (*.mp3;*.wav,*.m4a)|*.mp3;*.wav;*.m4a";
 
 			DialogResult res = dlg.ShowDialog();
 
@@ -67,11 +67,16 @@ namespace SoundBoardLive {
 		
 		private void timer1_Tick(object sender, EventArgs e) {
 			progressCue.Value = (int) (100 * audioFileReader.Position / audioFileReader.Length);
+
+			if ( audioFileReader.Position == audioFileReader.Length ) {
+				Stop();
+				Restart();
+			}
 		}
 
 
 		/// <summary>
-		/// Resets the cue
+		/// Resets the cue to not loaded state
 		/// </summary>
 		public void Clear() {
 			Stop();
@@ -94,6 +99,11 @@ namespace SoundBoardLive {
 			timer1.Enabled = false;
 		}
 
+		/// <summary>
+		/// Loads a sound and changes to stopped state
+		/// </summary>
+		/// <param name="FileName"></param>
+		/// <returns></returns>
 		public async Task LoadSound(String FileName) {
 			Clear();
 
@@ -108,13 +118,23 @@ namespace SoundBoardLive {
 			});
 		}
 		
+		/// <summary>
+		/// Restarts the sound to its initial position (either when playing or stopped)
+		/// </summary>
 		public void Restart() {
 			if (audioFileReader != null) {
 				audioFileReader.Position = 0;
 				progressCue.Value = 0;
+
+				waveOutDevice.Dispose();
+				waveOutDevice = new WaveOut();
+				waveOutDevice.Init(audioFileReader);
 			}
 		}
 		
+		/// <summary>
+		/// Starts playback
+		/// </summary>
 		public void Play() {
 			if (status == Status.Stopped || status == Status.Paused) {
 				waveOutDevice.Play();
@@ -129,6 +149,9 @@ namespace SoundBoardLive {
 			}
 		}
 
+		/// <summary>
+		/// Stops current playback
+		/// </summary>
 		public void Stop() {
 			if ( status == Status.Playing) {
 				waveOutDevice.Pause();
