@@ -30,6 +30,8 @@
 			this.lblId = new System.Windows.Forms.Label();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.progressCue = new System.Windows.Forms.ProgressBar();
+			this.lblProgress = new System.Windows.Forms.Label();
+			this.volSlider = new SoundBoardLive.VolumeControl();
 			this.SuspendLayout();
 			// 
 			// btPlay
@@ -82,24 +84,44 @@
 			// 
 			// progressCue
 			// 
-			this.progressCue.Location = new System.Drawing.Point(87, 31);
+			this.progressCue.Location = new System.Drawing.Point(84, 33);
 			this.progressCue.Name = "progressCue";
 			this.progressCue.Size = new System.Drawing.Size(162, 23);
 			this.progressCue.TabIndex = 7;
 			this.progressCue.Visible = false;
+			// 
+			// lblProgress
+			// 
+			this.lblProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblProgress.AutoSize = true;
+			this.lblProgress.BackColor = System.Drawing.Color.Transparent;
+			this.lblProgress.Location = new System.Drawing.Point(104, 38);
+			this.lblProgress.Name = "lblProgress";
+			this.lblProgress.Size = new System.Drawing.Size(24, 13);
+			this.lblProgress.TabIndex = 9;
+			this.lblProgress.Text = "--/--";
+			// 
+			// volSlider
+			// 
+			this.volSlider.Location = new System.Drawing.Point(277, 4);
+			this.volSlider.Name = "volSlider";
+			this.volSlider.Size = new System.Drawing.Size(10, 53);
+			this.volSlider.TabIndex = 8;
 			// 
 			// SoundCue
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.Controls.Add(this.lblProgress);
+			this.Controls.Add(this.volSlider);
 			this.Controls.Add(this.progressCue);
 			this.Controls.Add(this.lblId);
 			this.Controls.Add(this.btPlay);
 			this.Controls.Add(this.lblFile);
 			this.Controls.Add(this.btBrowse);
 			this.Name = "SoundCue";
-			this.Size = new System.Drawing.Size(274, 59);
+			this.Size = new System.Drawing.Size(290, 59);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -113,5 +135,7 @@
 		private System.Windows.Forms.Label lblId;
 		private System.Windows.Forms.Timer timer1;
 		private System.Windows.Forms.ProgressBar progressCue;
+		private VolumeControl volSlider;
+		private System.Windows.Forms.Label lblProgress;
 	}
 }

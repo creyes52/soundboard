@@ -70,6 +70,12 @@
       <DependentUpon>SoundCue.cs</DependentUpon>
     </Compile>
     <Compile Include="SoundSessionFile.cs" />
+    <Compile Include="VolumeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="VolumeControl.Designer.cs">
+      <DependentUpon>VolumeControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -84,6 +90,9 @@
     </Compile>
     <EmbeddedResource Include="SoundCue.resx">
       <DependentUpon>SoundCue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VolumeControl.resx">
+      <DependentUpon>VolumeControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

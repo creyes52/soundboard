@@ -24,9 +24,12 @@ namespace SoundBoardLive {
 			
 			// initialize cues
 			this.cues = new Dictionary<char, SoundCue>();
-			for (char n = 'A'; n <= 'L'; n++) {
+			String flow = "QAZWSXEDCRFVTGBYHN";
+			foreach(char n in flow.ToCharArray()){ 
+			//for (char n = 'A'; n <= 'L'; n++) {
 				var cueControl = new SoundCue(n.ToString());
 				cueControl.Modified += Cue_Modified;
+				cueControl.VolumeChanged += Cue_Volume;
 
 				cues.Add(n, cueControl);// add to data model
 				lstCues.Controls.Add(cueControl);// add to UI
@@ -35,6 +38,10 @@ namespace SoundBoardLive {
 			// initialize sound chart
 			graph = panelTransport.CreateGraphics();
 			graph.Clear(Color.Black);
+		}
+
+		private void Cue_Volume(object sender, int e) {
+			// TODO: marcar como modificado
 		}
 
 		private void Cue_Modified(object sender, EventArgs e) {

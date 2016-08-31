@@ -19,6 +19,7 @@ namespace SoundBoardLive {
 		Stopped
 	}
 
+	
 	/// <summary>
 	/// Sound cue playback control
 	/// </summary>
@@ -29,6 +30,10 @@ namespace SoundBoardLive {
 		String id;
 		public string FileName { get; private set; }
 		public event EventHandler Modified = (a, b) => { };
+		public event EventHandler<Int32> VolumeChanged {
+			add { volSlider.VolumeChanged += value; }
+			remove { volSlider.VolumeChanged -= value; }
+		}
 
 		/// <summary>
 		/// 
@@ -39,6 +44,7 @@ namespace SoundBoardLive {
 			InitializeComponent();
 			lblId.Text = id;
 			this.id = id;
+			this.volSlider.VolumeChanged += VolSlider_VolumeChanged;
 
 			Clear();
 
@@ -46,6 +52,15 @@ namespace SoundBoardLive {
 				#pragma warning disable CS4014 // Do not await
 				LoadSound(FileName);
 				#pragma warning restore CS4014 // Do not await
+			}
+		}
+
+		private void VolSlider_VolumeChanged(object sender, int volume) {
+			if ( status != Status.Empty ) {
+				float newVolume = volume / 100.0f;
+				System.Diagnostics.Debug.WriteLine("Changing volume: " + newVolume);
+				audioFileReader.Volume = newVolume;
+				//waveOutDevice.Volume = newVolume;
 			}
 		}
 
@@ -67,6 +82,7 @@ namespace SoundBoardLive {
 		
 		private void timer1_Tick(object sender, EventArgs e) {
 			progressCue.Value = (int) (100 * audioFileReader.Position / audioFileReader.Length);
+			this.lblProgress.Text = String.Format("{0:m\\:ss}/{1:m\\:ss}", audioFileReader.CurrentTime, audioFileReader.TotalTime);
 
 			if ( audioFileReader.Position == audioFileReader.Length ) {
 				Stop();
@@ -108,14 +124,18 @@ namespace SoundBoardLive {
 			Clear();
 
 			lblFile.Text = Path.GetFileName(FileName);
-			btPlay.Enabled = true;
-			status = Status.Stopped;
 			this.FileName = FileName;
+
 			
 			await Task.Run(() => {
 				audioFileReader = new AudioFileReader(FileName);
 				waveOutDevice.Init(audioFileReader);
+
+				status = Status.Stopped;
 			});
+
+			btPlay.Enabled = true;
+			this.progressCue.Visible = true;
 		}
 		
 		/// <summary>
@@ -144,6 +164,7 @@ namespace SoundBoardLive {
 				progressCue.Visible = true;
 
 				status = Status.Playing;
+				this.BackColor = Color.Thistle;
 			} else if (status == Status.Playing) {
 				Stop();
 			}
@@ -160,6 +181,7 @@ namespace SoundBoardLive {
 
 				timer1.Enabled = false;
 				status = Status.Stopped;
+				this.BackColor = Color.Transparent;
 			}
 		}
 	}

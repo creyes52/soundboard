@@ -29,9 +29,9 @@
 			this.cargarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.guardarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.panelTransport = new System.Windows.Forms.Panel();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.cargarMusicaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.panelTransport = new System.Windows.Forms.Panel();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -41,10 +41,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.lstCues.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.lstCues.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.lstCues.Location = new System.Drawing.Point(0, 29);
 			this.lstCues.Margin = new System.Windows.Forms.Padding(3, 20, 3, 3);
 			this.lstCues.Name = "lstCues";
-			this.lstCues.Size = new System.Drawing.Size(841, 271);
+			this.lstCues.Size = new System.Drawing.Size(1764, 197);
 			this.lstCues.TabIndex = 0;
 			// 
 			// menuStrip1
@@ -53,7 +54,7 @@
             this.archivoToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(841, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(1764, 24);
 			this.menuStrip1.TabIndex = 1;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -73,7 +74,7 @@
 			// 
 			this.cargarToolStripMenuItem.Name = "cargarToolStripMenuItem";
 			this.cargarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-			this.cargarToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+			this.cargarToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
 			this.cargarToolStripMenuItem.Text = "&Abrir";
 			this.cargarToolStripMenuItem.Click += new System.EventHandler(this.cargarToolStripMenuItem_Click_1);
 			// 
@@ -81,7 +82,7 @@
 			// 
 			this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
 			this.guardarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.guardarToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+			this.guardarToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
 			this.guardarToolStripMenuItem.Text = "&Guardar";
 			this.guardarToolStripMenuItem.Click += new System.EventHandler(this.guardarToolStripMenuItem_Click);
 			// 
@@ -89,19 +90,9 @@
 			// 
 			this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
 			this.salirToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-			this.salirToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+			this.salirToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
 			this.salirToolStripMenuItem.Text = "&Salir";
 			this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
-			// 
-			// panelTransport
-			// 
-			this.panelTransport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.panelTransport.BackColor = System.Drawing.Color.Gray;
-			this.panelTransport.Location = new System.Drawing.Point(0, 306);
-			this.panelTransport.Name = "panelTransport";
-			this.panelTransport.Size = new System.Drawing.Size(841, 79);
-			this.panelTransport.TabIndex = 2;
 			// 
 			// toolStripSeparator1
 			// 
@@ -116,11 +107,21 @@
 			this.cargarMusicaToolStripMenuItem.Text = "Cargar &Musica";
 			this.cargarMusicaToolStripMenuItem.Click += new System.EventHandler(this.cargarMusicaToolStripMenuItem_Click);
 			// 
+			// panelTransport
+			// 
+			this.panelTransport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.panelTransport.BackColor = System.Drawing.Color.Gray;
+			this.panelTransport.Location = new System.Drawing.Point(0, 232);
+			this.panelTransport.Name = "panelTransport";
+			this.panelTransport.Size = new System.Drawing.Size(1764, 79);
+			this.panelTransport.TabIndex = 2;
+			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(841, 385);
+			this.ClientSize = new System.Drawing.Size(1764, 311);
 			this.Controls.Add(this.panelTransport);
 			this.Controls.Add(this.menuStrip1);
 			this.Controls.Add(this.lstCues);
