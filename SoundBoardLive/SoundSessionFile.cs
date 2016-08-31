@@ -4,7 +4,32 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace SoundBoardLive {
-	class SoundSessionFile {
+
+	/// <summary>
+	/// Holds the information for a single cue
+	/// </summary>
+	public class SoundCueInfo {
+
+		public SoundCueInfo(String FilePath, int volume) {
+			this.FilePath = FilePath;
+			this.volume = volume;
+		}
+
+		/// <summary>
+		/// The path to the sound file, absolute or relative
+		/// </summary>
+		public String FilePath{ get; set; }
+
+		/// <summary>
+		/// volume, valid values between 0 and 100
+		/// </summary>
+		public int volume { get; set; }
+	}
+
+	/// <summary>
+	/// Holds the information of an entire session
+	/// </summary>
+	public class SoundSessionFile {
 
 
 		/// <summary>
@@ -15,12 +40,12 @@ namespace SoundBoardLive {
 		/// <summary>
 		/// The dictionary of keys and filenames in this session
 		/// </summary>
-		public Dictionary<char, String>  FileList { get; set; }
+		public Dictionary<char, SoundCueInfo>  FileList { get; set; }
 
 		/// <summary>
 		/// Indicates if this session has been modified since it was loaded (or last saved)
 		/// </summary>
-		public bool Modified { get; private set; }
+		public bool Modified { get; set; }
 
 
 		
@@ -29,7 +54,9 @@ namespace SoundBoardLive {
 		/// Initializes an empty session object
 		/// </summary>
 		public SoundSessionFile() {
-			this.FileList = new Dictionary<char, string>();
+			this.FileList = new Dictionary<char, SoundCueInfo>();
+			this.Modified = false;
+			this.FileName = null;
 		}
 
 		/// <summary>

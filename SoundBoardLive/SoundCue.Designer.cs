@@ -32,6 +32,7 @@
 			this.progressCue = new System.Windows.Forms.ProgressBar();
 			this.lblProgress = new System.Windows.Forms.Label();
 			this.volSlider = new SoundBoardLive.VolumeControl();
+			this.btnLimpiar = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// btPlay
@@ -56,9 +57,9 @@
 			// 
 			// btBrowse
 			// 
-			this.btBrowse.Location = new System.Drawing.Point(3, 3);
+			this.btBrowse.Location = new System.Drawing.Point(3, 4);
 			this.btBrowse.Name = "btBrowse";
-			this.btBrowse.Size = new System.Drawing.Size(75, 23);
+			this.btBrowse.Size = new System.Drawing.Size(39, 23);
 			this.btBrowse.TabIndex = 3;
 			this.btBrowse.TabStop = false;
 			this.btBrowse.Text = "Buscar";
@@ -108,11 +109,22 @@
 			this.volSlider.Size = new System.Drawing.Size(10, 53);
 			this.volSlider.TabIndex = 8;
 			// 
+			// btnLimpiar
+			// 
+			this.btnLimpiar.Location = new System.Drawing.Point(41, 4);
+			this.btnLimpiar.Name = "btnLimpiar";
+			this.btnLimpiar.Size = new System.Drawing.Size(43, 23);
+			this.btnLimpiar.TabIndex = 10;
+			this.btnLimpiar.Text = "Limpiar";
+			this.btnLimpiar.UseVisualStyleBackColor = true;
+			this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+			// 
 			// SoundCue
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.Controls.Add(this.btnLimpiar);
 			this.Controls.Add(this.lblProgress);
 			this.Controls.Add(this.volSlider);
 			this.Controls.Add(this.progressCue);
@@ -137,5 +149,6 @@
 		private System.Windows.Forms.ProgressBar progressCue;
 		private VolumeControl volSlider;
 		private System.Windows.Forms.Label lblProgress;
+		private System.Windows.Forms.Button btnLimpiar;
 	}
 }

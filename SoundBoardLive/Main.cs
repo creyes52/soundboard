@@ -13,20 +13,20 @@ using System.IO;
 
 namespace SoundBoardLive {
 	public partial class Main : Form {
+
 		Dictionary<char, SoundCue> cues;
 		SoundSessionFile Session;
-		bool sessionModified;
 		private Graphics graph;
+		private bool _modified;
 
 		public Main() {
 			InitializeComponent();
-			this.sessionModified = false;
-			
-			// initialize cues
+			this.Session = new SoundSessionFile();
 			this.cues = new Dictionary<char, SoundCue>();
+			
+			// initialize cue controls
 			String flow = "QAZWSXEDCRFVTGBYHN";
-			foreach(char n in flow.ToCharArray()){ 
-			//for (char n = 'A'; n <= 'L'; n++) {
+			foreach (char n in flow.ToCharArray()) {
 				var cueControl = new SoundCue(n.ToString());
 				cueControl.Modified += Cue_Modified;
 				cueControl.VolumeChanged += Cue_Volume;
@@ -41,32 +41,69 @@ namespace SoundBoardLive {
 		}
 
 		private void Cue_Volume(object sender, int e) {
-			// TODO: marcar como modificado
+			_setModified(true);
 		}
 
 		private void Cue_Modified(object sender, EventArgs e) {
-			if ( sessionModified == false) {
+			_setModified(true);
+		}
+		
+		private bool _setModified(bool newState) {
+			bool current = this._modified;
+			if ( !_modified && newState ) {
 				this.Text = this.Text + " *";
 			}
-			sessionModified = true;
+			this._modified = newState;
+			return current;
+		}
+		
+		private void CheckForModifications() {
+			if (_modified) {
+				DialogResult outDlg = MessageBox.Show("¿Desea guardar los cambios actuales?", "Session modificada", MessageBoxButtons.YesNo);
+				if (outDlg == DialogResult.Yes) {
+					SaveSession();
+				}
+			}
 		}
 
-		private async void LoadSession(String FileName) {
-			this.Session = SoundSessionFile.Load(FileName);
 
-			this.Text = Path.GetFileName(FileName);
-			this.sessionModified = false;
+
+
+		private async Task _loadSession(SoundSessionFile session) {
+			this.Session = session;
+			this.Text = Path.GetFileName(session.FileName);
+			_setModified(false);
+
+			ClearAll();
 
 			// update the UI
 			foreach (var pair in this.Session.FileList) {
 				SoundCue soundCue;
 				if (cues.TryGetValue(pair.Key, out soundCue)) {
-					if ( pair.Value != null ) {
-						await soundCue.LoadSound(pair.Value);
-					} else {
-						soundCue.Clear();
+					if (pair.Value != null) {
+						await soundCue.LoadSound(pair.Value.FilePath);
+						soundCue.SetVolume(pair.Value.volume);
 					}
 				}
+			}
+		}
+
+		private async void LoadSession(String FileName) {
+			var session = SoundSessionFile.Load(FileName);
+			await _loadSession(session);
+		}
+
+		private void StopAll() {
+			// stop everything
+			foreach (var cue in cues) {
+				cue.Value.Stop();
+			}
+		}
+
+		private void ClearAll() {
+			// stop everything
+			foreach (var cue in cues) {
+				cue.Value.Clear();
 			}
 		}
 
@@ -74,68 +111,40 @@ namespace SoundBoardLive {
 			String FileDest = null;
 
 			// find file
-			if (this.Session == null) {
+			if (this.Session.FileName == null) {
 				var dlg = new SaveFileDialog();
 				dlg.Filter = "soundboard (*.sbd)|*.sbd";
 
 				DialogResult res = dlg.ShowDialog();
-				if (res == DialogResult.OK) {
-					this.Session = new SoundSessionFile();
-					FileDest = dlg.FileName;
-				} else {
+				if (res != DialogResult.OK) {
 					return;
 				}
+
+				FileDest = dlg.FileName;
 			} else {
 				FileDest = this.Session.FileName;
 			}
 
-			// update session
+			// update session model
 			foreach (var cue in cues) {
-				this.Session.FileList[cue.Key] = cue.Value.FileName;
-			}
-
-			if ( this.Session != null ) {
-				this.Session.Save(FileDest);
-
-				this.Text = Path.GetFileName(FileDest);
-				this.sessionModified = false;
-			}
-		}
-
-
-
-		private void Main_KeyUp(object sender, KeyEventArgs e) {
-			SoundCue soundCue;
-			if (cues.TryGetValue((char)e.KeyValue, out soundCue)) {
-				if (e.Shift) {
-					soundCue.Restart();
+				if( cue.Value.Status != Status.Empty) {
+					this.Session.FileList[cue.Key] = new SoundCueInfo(cue.Value.FileName, cue.Value.Volume);
 				} else {
-					soundCue.Play();
+					this.Session.FileList[cue.Key] = null;
 				}
 			}
+
+			this.Session.Save(FileDest);
+			this.Text = Path.GetFileName(FileDest);
+			_setModified(false);
 		}
 		
-		private void guardarToolStripMenuItem_Click(object sender, EventArgs e) {
-			SaveSession();
-		}
-
-		private void cargarToolStripMenuItem_Click_1(object sender, EventArgs e) {
-			if ( this.sessionModified ) {
-				DialogResult outDlg = MessageBox.Show("¿Descartar los cambios actuales?", "Session modificada", MessageBoxButtons.YesNo);
-				if ( outDlg == DialogResult.No) {
-					return;
-				}
-			}
-			
+		private void OpenSessionFile() {
 			var dlg = new OpenFileDialog();
 			dlg.Filter = "soundboard (*.sbd)|*.sbd";
 			DialogResult res = dlg.ShowDialog();
 			if (res == DialogResult.OK) {
-				
-				// stop everything
-				foreach(var cue in cues) {
-					cue.Value.Stop();
-				}
+				StopAll();
 
 				try {
 					LoadSession(dlg.FileName);
@@ -145,9 +154,42 @@ namespace SoundBoardLive {
 			}
 		}
 
+
+		private void Main_KeyUp(object sender, KeyEventArgs e) {
+			SoundCue soundCue;
+			if (cues.TryGetValue((char)e.KeyValue, out soundCue)) {
+				if (e.Shift) {
+					soundCue.Restart();
+				} else {
+					if ( soundCue.Status == Status.Paused) {
+						soundCue.Play();
+					} else {
+						soundCue.Stop();
+					}
+				}
+			}
+		}
+		
+		private void cargarToolStripMenuItem_Click_1(object sender, EventArgs e) {
+			CheckForModifications();
+			OpenSessionFile();
+		}
+		
+		private void guardarToolStripMenuItem_Click(object sender, EventArgs e) {
+			SaveSession();
+		}
+
 		private void salirToolStripMenuItem_Click(object sender, EventArgs e) {
+			CheckForModifications();
 			this.Close();
 		}
+
+		private async void nuevoToolStripMenuItem_Click(object sender, EventArgs e) {
+			CheckForModifications();
+			var session = new SoundSessionFile();
+			await _loadSession(session);
+		}
+
 
 		private void cargarMusicaToolStripMenuItem_Click(object sender, EventArgs e) {
 			var dlg = new OpenFileDialog();
