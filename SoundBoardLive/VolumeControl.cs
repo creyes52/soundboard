@@ -12,13 +12,16 @@ namespace SoundBoardLive {
 	public partial class VolumeControl : UserControl {
 		bool drawing;
 		private Graphics graph;
-		int volume;
+		private int _volume;
+
+		public int Volume { get { return _volume; } set { _volume = value; this.Refresh(); } }
+
 		public event EventHandler<Int32> VolumeChanged = (obj, vol) => { };
 
 		public VolumeControl() {
 			InitializeComponent();
 			drawing = false;
-			volume = 100;
+			_volume = 100;
 			graph = this.CreateGraphics();
 		}
 
@@ -34,17 +37,17 @@ namespace SoundBoardLive {
 			int y = this.Height - e.Y;
 
 			if (drawing) {
-				volume = (100 * y) / this.Height;
-				if (volume > 100) volume = 100;
-				if (volume < 0) volume = 0;
+				_volume = (100 * y) / this.Height;
+				if (_volume > 100) _volume = 100;
+				if (_volume < 0) _volume = 0;
 
 				ReDraw();
-				VolumeChanged(this, volume);
+				VolumeChanged(this, _volume);
 			}
 		}
 
 		private void ReDraw() {
-			int y = this.Height - this.volume * this.Height / 100;
+			int y = this.Height - this._volume * this.Height / 100;
 
 			graph.Clear(Color.White);
 			graph.FillRectangle(Brushes.Green, new Rectangle(0, y, this.Width, this.Height));

@@ -56,7 +56,7 @@ namespace SoundBoardLive {
 		}
 
 		private void VolSlider_VolumeChanged(object sender, int volume) {
-			SetVolume(volume);
+			_updateAudioVolume(volume);
 		}
 
 		private async void btBrowse_Click(object sender, EventArgs e) {
@@ -100,8 +100,13 @@ namespace SoundBoardLive {
 		/// </summary>
 		/// <param name="newVolume">a number between 0 and 100</param>
 		public void SetVolume(int newVolume) {
+			_updateAudioVolume(newVolume);
+			this.volSlider.Volume = newVolume;
+		}
+
+		private void _updateAudioVolume(int newVolume) {
 			this.volume = newVolume / 100.0f;
-			if ( status != Status.Empty ) {
+			if (status != Status.Empty) {
 				audioFileReader.Volume = this.volume;
 			}
 		}
