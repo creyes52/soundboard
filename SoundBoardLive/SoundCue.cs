@@ -166,6 +166,10 @@ namespace SoundBoardLive {
 				audioFileReader.Position = 0;
 				progressCue.Value = 0;
 			}
+			if ( status == Status.Paused) {
+				waveOutDevice.Init(audioFileReader);
+			}
+			lblProgress.Text = "";
 		}
 		
 		/// <summary>
