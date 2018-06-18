@@ -35,7 +35,7 @@ namespace SoundBoardLive {
 				lstCues.Controls.Add(cueControl);// add to UI
 			}
 
-			// initialize sound chart
+			// initialize sound chart, comment
 			graph = panelTransport.CreateGraphics();
 			graph.Clear(Color.Black);
 		}
