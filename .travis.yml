@@ -6,6 +6,6 @@ deploy:
     secure: kd1OCPxgPg4fE7EE1Ih3Hjp9Ap4NCJ38jUV+zt06ho/0mcTfBgwAXhJSUgykHwf+f0/JMUL9kl6noSugqNYkkgjAQNzYibFVOx6rFPSWpFmNPFxX1kdP1hwMiNF77d4m50nLtYzcpXvle04HCDCF40z/fBerwQm6lWs/g5nLDZcyVRAfVY+kSXywk5ToP/MBZAuz+OXEeNmRGuZFTuJwhMolzSl7VfmyZkxe7VTGtYR238DuIwjq6K2/7FJNmAmP4N/InGRTnYQGdJp5CTMe2jJ2RYi3MfwX65jT+JFIqmwwHHAEi9KT5UQv8YCiYCqtUxNRiYHbNH73ep0HWqx+6FIJyxWcMu96xwTtHMR/z//sruCaWJlDL2+XPiF4a4nAqwZ0GtmnRsCN5068DSLAZ0FtUkN8kffv3Ifd86kfuTFfy3ROG36KQbRecFM+1YSbOZePGlmpLqjJmaSzhyyGxHjRJoAaHWyQagD3zQ/AkuCgqREHnmRkpKQ8rImy+OcHRdjlW3kailg/tPsP5o3AzVrOdG1gwGp5dc+Y5xuxtms/FUQZH11yzfq5qr82s1AQC+nBhCgYPEK7oU5RZaM1LsG4Y9CY+Fjs2P7WwnCBYqx/9T7zD+UWG6mwdajduJYBBm+cjQYH8smzIdjdIZXjCHAoOBwkAOPDJ3sdku6i7E4=
   file_glob: true
   skip_cleanup: true
-  file: *
+  file: bin/*
   on:
     repo: creyes52/soundboard
