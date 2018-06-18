@@ -89,8 +89,15 @@ namespace SoundBoardLive {
 		}
 
 		private async void LoadSession(String FileName) {
-			var session = SoundSessionFile.Load(FileName);
-			await _loadSession(session);
+            try
+            {
+                var session = SoundSessionFile.Load(FileName);
+                await _loadSession(session);
+            } catch(Exception e)
+            {
+                MessageBox.Show("Ha ocurrido un problema", e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+			
 		}
 
 		private void StopAll() {
